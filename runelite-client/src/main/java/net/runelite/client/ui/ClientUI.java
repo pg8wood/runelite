@@ -69,6 +69,7 @@ import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.events.FocusChanged;
 import net.runelite.client.RuneLite;
 import net.runelite.client.RuneLiteProperties;
 import net.runelite.client.callback.ClientThread;
@@ -85,11 +86,7 @@ import net.runelite.client.input.MouseAdapter;
 import net.runelite.client.input.MouseListener;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.ui.skin.SubstanceRuneLiteLookAndFeel;
-import net.runelite.client.util.HotkeyListener;
-import net.runelite.client.util.ImageUtil;
-import net.runelite.client.util.OSType;
-import net.runelite.client.util.OSXUtil;
-import net.runelite.client.util.SwingUtil;
+import net.runelite.client.util.*;
 import org.pushingpixels.substance.internal.SubstanceSynapse;
 import org.pushingpixels.substance.internal.utils.SubstanceCoreUtilities;
 import org.pushingpixels.substance.internal.utils.SubstanceTitlePaneUtilities;
@@ -458,6 +455,8 @@ public class ClientUI
 			frame.pack();
 			frame.revalidateMinimumSize();
 
+			OSXUtil.tryEnableTouchBar(frame);
+
 			// Create tray icon (needs to be created after frame is packed)
 			trayIcon = SwingUtil.createTrayIcon(ICON, properties.getTitle(), frame);
 
@@ -600,6 +599,21 @@ public class ClientUI
 
 		frame.requestFocus();
 		giveClientFocus();
+	}
+
+	@Subscribe
+	public void onFocusChanged(FocusChanged event)
+	{
+		if (OSType.getOSType() != OSType.MacOS) {
+			return;
+		}
+
+		if (event.isFocused())
+		{
+			TouchBarUtil.hideControlStrip();
+		} else {
+			TouchBarUtil.restoreControlStrip();
+		}
 	}
 
 	/**

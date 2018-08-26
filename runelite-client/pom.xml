@@ -238,6 +238,11 @@
 			<version>${guice.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.thizzer.jtouchbar</groupId>
+			<artifactId>jtouchbar</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

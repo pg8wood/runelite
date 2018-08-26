@@ -26,8 +26,30 @@ package net.runelite.client.util;
 
 import com.apple.eawt.Application;
 import com.apple.eawt.FullScreenUtilities;
+import com.thizzer.jtouchbar.JTouchBar;
+import com.thizzer.jtouchbar.common.Image;
+import com.thizzer.jtouchbar.item.PopoverTouchBarItem;
+import com.thizzer.jtouchbar.item.TouchBarItem;
+import com.thizzer.jtouchbar.item.view.TouchBarButton;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import lombok.extern.slf4j.Slf4j;
+
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.security.Key;
+import java.util.HashMap;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * A class with OSX-specific functions to improve integration.
@@ -60,5 +82,56 @@ public class OSXUtil
 			app.requestForeground(true);
 			log.debug("Requested focus on macOS");
 		}
+	}
+
+	public static void tryEnableTouchBar(JFrame gui) {
+        if (OSType.getOSType() == OSType.MacOS)
+        {
+            TouchBarUtil.hideControlStrip();
+            JTouchBar jTouchBar = new JTouchBar();
+
+			int keyCode = 0x70; // F1 key code is 0x70
+
+			for (int i = 0; i < TouchBarUtil.touchBarButtonNames.length; i++)
+            {
+				int interfaceKeyCode;
+				String interfaceName = TouchBarUtil.touchBarButtonNames[i];
+				interfaceKeyCode = keyCode + i;
+
+//<<<<<<< HEAD
+//
+//                button.setAction(touchBarView ->
+//				{
+//                    try
+//					{
+//                        Robot robot = new Robot();
+//                        robot.keyPress(keyCode);
+//                    }
+//                    catch (AWTException e)
+//					{
+//                        e.printStackTrace();
+//                    }
+//                });
+//
+//                popoverTouchBar.addItem(new TouchBarItem(interfaceName, button, true));
+//            }
+//
+//            // Setup inventory icon
+//
+//=======
+//            	TouchBarButton touchBarButton = configureTouchBarButton(interfaceName, interfaceKeyCode);
+            	TouchBarButton touchBarButton = TouchBarUtil.createTouchBarButton(interfaceName, interfaceKeyCode);
+            	TouchBarItem touchBarItem = new TouchBarItem(interfaceName, touchBarButton, true);
+                jTouchBar.addItem(touchBarItem);
+            }
+
+            // Setup inventory icon
+
+
+            popoverItem.setPopoverTouchBar(popoverTouchBar);
+
+            jTouchBar.addItem(popoverItem);
+            jTouchBar.show(gui);
+        }
 	}
 }
