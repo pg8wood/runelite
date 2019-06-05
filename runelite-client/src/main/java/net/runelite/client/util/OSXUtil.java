@@ -36,6 +36,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -85,53 +86,25 @@ public class OSXUtil
 	}
 
 	public static void tryEnableTouchBar(JFrame gui) {
-        if (OSType.getOSType() == OSType.MacOS)
-        {
-            TouchBarUtil.hideControlStrip();
-            JTouchBar jTouchBar = new JTouchBar();
+		if (OSType.getOSType() == OSType.MacOS)
+		{
+			TouchBarUtil.hideControlStrip();
+			JTouchBar jTouchBar = new JTouchBar();
 
 			int keyCode = 0x70; // F1 key code is 0x70
 
 			for (int i = 0; i < TouchBarUtil.touchBarButtonNames.length; i++)
-            {
+			{
 				int interfaceKeyCode;
 				String interfaceName = TouchBarUtil.touchBarButtonNames[i];
 				interfaceKeyCode = keyCode + i;
 
-//<<<<<<< HEAD
-//
-//                button.setAction(touchBarView ->
-//				{
-//                    try
-//					{
-//                        Robot robot = new Robot();
-//                        robot.keyPress(keyCode);
-//                    }
-//                    catch (AWTException e)
-//					{
-//                        e.printStackTrace();
-//                    }
-//                });
-//
-//                popoverTouchBar.addItem(new TouchBarItem(interfaceName, button, true));
-//            }
-//
-//            // Setup inventory icon
-//
-//=======
-//            	TouchBarButton touchBarButton = configureTouchBarButton(interfaceName, interfaceKeyCode);
-            	TouchBarButton touchBarButton = TouchBarUtil.createTouchBarButton(interfaceName, interfaceKeyCode);
-            	TouchBarItem touchBarItem = new TouchBarItem(interfaceName, touchBarButton, true);
-                jTouchBar.addItem(touchBarItem);
-            }
+				TouchBarButton touchBarButton = TouchBarUtil.createTouchBarButton(interfaceName, interfaceKeyCode);
+				TouchBarItem touchBarItem = new TouchBarItem(interfaceName, touchBarButton, true);
+				jTouchBar.addItem(touchBarItem);
+			}
 
-            // Setup inventory icon
-
-
-            popoverItem.setPopoverTouchBar(popoverTouchBar);
-
-            jTouchBar.addItem(popoverItem);
-            jTouchBar.show(gui);
-        }
+			jTouchBar.show(gui);
+		}
 	}
 }
